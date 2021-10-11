@@ -67,10 +67,10 @@ int main() {
 	std::cout << b.back();
 
 	string str = "rgssgvxcds";
+	b.push_back(str);
+	cout << str << endl;
 	b.push_back(std::move(str));
-
-	b.emplace_back("gdgdfvxc");
-
+	cout << str << endl; // empty string, so move push works right
 	std::cout << b.back();
 
 	cout << endl;

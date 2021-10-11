@@ -728,42 +728,10 @@ public:
   }
   
   /**
-   * Add element to the end of deque by copy
+   * Add element to the end of deque
    * pram[in] value element to add
    */
-  void push_back(T const& value) {
-    if (data == nullptr)
-      *this = deque();
-
-    size_t tmp_last_i = last_i;
-    size_t tmp_last_j = last_j;
-    size_t i = last_i;
-    size_t j = last_j++;
-
-    if (last_j == FIXED_ARRAY_SIZE) {
-      ++last_i;
-      last_j = 0;
-    }
-
-    if (i >= dynamic_arr_size) {
-      try {
-        _increase_size(false);
-      }
-      catch (std::bad_alloc) {
-        last_i = tmp_last_i;
-        last_j = tmp_last_j;
-        throw;
-      }
-    }
-
-    alloc_traits::construct(alloc, data[i] + j, value);
-    ++_size;
-  }
-
-  /**
-   * Add element to the end of deque by move
-   * pram[in] value rvalue reference to element to add
-   */
+  template <typename T> // universal reference
   void push_back(T&& value) {
     if (data == nullptr)
       *this = deque();
@@ -789,7 +757,7 @@ public:
       }
     }
 
-    alloc_traits::construct(alloc, data[i] + j, std::move(value));
+    alloc_traits::construct(alloc, data[i] + j, std::forward<T>(value));
     ++_size;
   }
   
@@ -797,7 +765,7 @@ public:
    * Construct element in the end of deque
    * pram[in] args constructor parameters
    */
-  template<typename... Args>
+  template <typename... Args>
   void emplace_back(Args&&... args)  {
     if (data == nullptr)
       *this = deque();
@@ -828,37 +796,10 @@ public:
   }
   
   /**
-   * Add element to the front of deque by copy
+   * Add element to the front of deque
    * pram[in] value element to add
    */
-  void push_front(T const& value) {
-    if (data == nullptr)
-      *this = deque();
-
-    --first_j;
-
-    if (first_j == SIZE_MAX) {
-      if (first_i == 0) {
-        try {
-          _increase_size(true);
-        }
-        catch (std::bad_alloc) {
-          first_j = 0;
-          throw;
-        }
-      }
-      --first_i;
-      first_j = FIXED_ARRAY_SIZE - 1;
-    }
-
-    alloc_traits::construct(alloc, data[first_i] + first_j, value);
-    ++_size;
-  }
-
-  /**
-   * Add element to the front of deque by move
-   * pram[in] value rvalue reference to element to add
-   */
+  template <typename T> // universal reference
   void push_front(T&& value) {
     if (data == nullptr)
       *this = deque();
@@ -879,7 +820,7 @@ public:
       first_j = FIXED_ARRAY_SIZE - 1;
     }
 
-    alloc_traits::construct(alloc, data[first_i] + first_j, std::move(value));
+    alloc_traits::construct(alloc, data[first_i] + first_j, std::forward<T>(value));
     ++_size;
   }
 
