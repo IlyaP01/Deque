@@ -708,7 +708,7 @@ public:
    * @return true if deque is empty else false
    */
   bool empty() const noexcept {
-    return _size;
+    return _size == 0;
   }
   
   /**
